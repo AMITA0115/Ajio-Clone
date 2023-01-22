@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men</title>
+    <style>
+         #nav{
+        /* border: 2px solid red; */
+        height: 40px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    #nav> img{
+       width: 5%;
+       height: 30px;
+    }
+    #nav>button{
+       align-items: center;
+        background-color: white;
+        border: none;
+    }
+    #product-container{
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20%;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+        
+        
+      }
+      #product-container>div>img{
+       
+        
+        height: 100px;
+        width: 100%;
+        
+
+      }
+
+      #product-container>div{
+        /* border: 2px solid red; */
+        box-shadow: rgba(0, 0, 0, 0.35) 1px 1px 10px ;
+        padding: 10px;
+        border-radius: 20px;
+        transition-duration: 2s;
+
+      }
+      #product-container>div > img{
+         width: 50%;
+         height: 250px;
+      }
+      #product-container>div:hover{
+        box-shadow: 1px 1px 10px 1px;
+      }
+
+      #product-container>div > button{
+         display: block;
+         margin: auto;
+         background-color: black;
+         color: white;
+         padding: 5px;
+         border: none;
+         border-radius: 3px;
+
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="nav">
+            <img src="./ajio logo design.webp"  alt="error">
+            <a href="./index.html">Home</a>
+            <button>WOMEN</button>
+            <button>KIDS</button>
+            <button>INDIE</button>
+            <button>HOME AND KITCHEN</button>
+            <a href="./cart.html">Cart</a>
+        
+        
+        </div>
+
+        </div>
+
+        <div id="product-container">
+        <!-- //here i will append all items -->
+        </div>
+
+
+    
+</body>
+    <script>
+
+        let container=document.getElementById("product-container");
+        let fetcheddata=[] ;
+
+        const API="https://63c97bf6c3e2021b2d588e9f.mockapi.io/products"
+        // const API="https://63c97bf6c3e2021b2d588e9f.mockapi.io/e-commerce"
+
+        fetch(API)
+      .then((request) => {
+        return request.json() ;
+      })
+
+      .then((data) => {
+        fetcheddata=data
+        DisplayProducts(data)
+        console.log(data) ;
+      })
+
+      .catch((error) => {
+        console.log(error)
+      })
+
+
+
+
+
+
+      let cartarr=JSON.parse(localStorage.getItem("cart"))||[]
+
+function DisplayProducts(data){
+ container.innerHTML="" ;
+  data.forEach((ele,ind)=> {
+  let card=document.createElement("div");
+  let image=document.createElement("img");
+  image.src=ele.avatar ;
+  
+  let description=document.createElement("p");
+  description.innerText=ele.Description;
+
+  let brand=document.createElement("h3");
+      brand.innerText=ele.category
+;
+ 
+    let price=document.createElement("h4") ;
+    price.innerText=ele.Price ;
+
+    let addtocart=document.createElement("button");
+    addtocart.innerText="Add to cart" ;
+
+    addtocart.addEventListener("click", () => {
+  if(checkDuplicate(ele)){
+    alert("Product Already in Cart")
+  } else {
+    cartarr.push({...ele,quantity:1})
+    localStorage.setItem("cart",JSON.stringify(cartarr))
+    alert("Product Added To Cart")
+  }
+    })
+
+
+    card.append(image,description,price,brand,addtocart);
+    container.append(card);
+
+ })
+}
+
+function checkDuplicate(element){
+  for(let i=0; i<cartarr.length ; i++){
+    if(cartarr[i].id == element.id){
+      return true ;
+    } 
+  } return false ;
+}
+
+    </script>
+</html>
